@@ -1,25 +1,25 @@
-# Installation and Quick Start Guide
-## Deployment Instructions for PostgreSQL SST/PESV Multi-Tenant Database
+# Guía de Instalación e Inicio Rápido
+## Instrucciones de Despliegue para la Base de Datos Multi-Tenant SST/PESV en PostgreSQL
 
-* **Author:** Diego Mantilla
-* **Repository:** https://github.com/DMntill4/examPostgreSQL.git
-* **Target Engine:** PostgreSQL 16+ via Docker Compose
-
----
-
-## 1. Prerequisites
-
-Before starting, ensure you have the following tools installed on your operating system:
-
-* **Git:** Version control client ([git-scm.com](https://git-scm.com/))
-* **Docker Desktop:** Container engine ([docker.com](https://www.docker.com/))
-* **Docker Compose:** Version 2.0+ (Included with Docker Desktop)
+* **Autor:** Diego Mantilla
+* **Repositorio:** https://github.com/DMntill4/examPostgreSQL.git
+* **Motor Objetivo:** PostgreSQL 16+ mediante Docker Compose
 
 ---
 
-## 2. Step 1: Clone the Repository
+## 1. Requisitos Previos
 
-Open your terminal (PowerShell, Command Prompt, or Bash) and clone the repository:
+Antes de comenzar, asegúrate de tener instaladas las siguientes herramientas en tu sistema operativo:
+
+* **Git:** Cliente de control de versiones ([git-scm.com](https://git-scm.com/))
+* **Docker Desktop:** Motor de contenedores ([docker.com](https://www.docker.com/))
+* **Docker Compose:** Versión 2.0+ (Incluido con Docker Desktop)
+
+---
+
+## 2. Paso 1: Clonar el Repositorio
+
+Abre tu terminal (PowerShell, CMD o Bash) y clona el repositorio:
 
 ```bash
 git clone https://github.com/DMntill4/examPostgreSQL.git
@@ -28,38 +28,38 @@ cd examPostgreSQL
 
 ---
 
-## 3. Step 2: Deploy Containerized Environment
+## 3. Paso 2: Desplegar el Entorno Contenedorizado
 
-Run the following command to start both the PostgreSQL 16 server and pgAdmin 4 in detached mode:
+Ejecuta el siguiente comando para iniciar el servidor de PostgreSQL 16 y pgAdmin 4 en segundo plano:
 
 ```bash
 docker compose up -d
 ```
 
-### Automatic Database Initialization
-When the container boots for the first time, Docker automatically executes the SQL scripts located in `sql/` in alphabetical order:
-1. `sql/01_schema.sql`: Creates the `sst` schema, 20 normalized tables (3FN), foreign keys, and integrity constraints.
-2. `sql/02_seed_data.sql`: Populates the database with initial catalog, tenant, employee, module, and document seed data.
+### Inicialización Automática de la Base de Datos
+Cuando el contenedor arranca por primera vez, Docker ejecuta automáticamente los scripts SQL ubicados en `sql/` en orden alfabético:
+1. `sql/01_schema.sql`: Crea el esquema `sst`, las 20 tablas normalizadas (3FN), llaves foráneas y restricciones de integridad.
+2. `sql/02_seed_data.sql`: Puebla la base de datos con información inicial de catálogos, empresas, personal, módulos y documentos.
 
 ---
 
-## 4. Step 3: Connect and Verify Database
+## 4. Paso 3: Conexión y Verificación
 
-### Option A: Command Line Interface (`psql` via Docker)
-To open an interactive PostgreSQL shell inside the container:
+### Opción A: Consola de Comandos (`psql` vía Docker)
+Para abrir una consola interactiva de PostgreSQL dentro del contenedor:
 
 ```bash
 docker exec -it sst_pesv_pg psql -U sst_admin -d sst_pesv_db
 ```
 
-Once inside `psql`, set the active schema and list all 20 tables:
+Una vez adentro de `psql`, establece el esquema activo y lista las 20 tablas:
 
 ```sql
 SET search_path TO sst, public;
 \dt
 ```
 
-To test querying initialized tenant data:
+Para probar la consulta de datos de empresas registradas:
 
 ```sql
 SELECT * FROM sst.tenants;
@@ -67,49 +67,49 @@ SELECT * FROM sst.tenants;
 
 ---
 
-### Option B: Graphical User Interface via pgAdmin 4 Web
+### Opción B: Interfaz Gráfica Web mediante pgAdmin 4
 
-1. Open your browser and navigate to: **[http://localhost:8080](http://localhost:8080)**
-2. Log in with default credentials:
-   * **Email:** `admin@admin.com`
-   * **Password:** `admin`
-3. Click **Add New Server** and configure connection parameters:
+1. Abre tu navegador e ingresa a: **[http://localhost:8080](http://localhost:8080)**
+2. Inicia sesión con las credenciales por defecto:
+   * **Correo:** `admin@admin.com`
+   * **Contraseña:** `admin`
+3. Haz clic en **Add New Server** y configura los parámetros de conexión:
    * **Name:** `SST Database`
-   * **Host:** `db` (or `localhost` / `127.0.0.1` if connecting outside docker network)
+   * **Host:** `db` (o `localhost` / `127.0.0.1` si te conectas fuera de la red docker)
    * **Port:** `5432`
    * **Maintenance Database:** `sst_pesv_db`
    * **Username:** `sst_admin`
    * **Password:** `sst_admin_pass`
-4. Expand `Databases` $\rightarrow$ `sst_pesv_db` $\rightarrow$ `Schemas` $\rightarrow$ `sst`. Right-click `sst` and select **Generate ERD** to view the auto-generated ER Diagram.
+4. Despliega `Databases` $\rightarrow$ `sst_pesv_db` $\rightarrow$ `Schemas` $\rightarrow$ `sst`. Haz clic derecho sobre `sst` y selecciona **Generate ERD** para ver el diagrama ER generado.
 
 ---
 
-### Option C: External SQL GUI Clients (DBeaver / DataGrip / VS Code)
+### Opción C: Clientes Gráficos Externos (DBeaver / DataGrip / VS Code)
 
-Connect any desktop database client using the exposed localhost port:
+Conecta cualquier cliente de base de datos usando el puerto expuesto en localhost:
 
-* **Host:** `localhost` (or `127.0.0.1`)
-* **Port:** `5432`
-* **Database:** `sst_pesv_db`
-* **Username:** `sst_admin`
-* **Password:** `sst_admin_pass`
+* **Host:** `localhost` (o `127.0.0.1`)
+* **Puerto:** `5432`
+* **Base de datos:** `sst_pesv_db`
+* **Usuario:** `sst_admin`
+* **Contraseña:** `sst_admin_pass`
 
 ---
 
-## 5. Step 4: Environment Reset and Troubleshooting
+## 5. Paso 4: Reinicio y Mantenimiento del Entorno
 
-If you modify schema scripts and need to rebuild the database from scratch:
+Si modificas los scripts del esquema y necesitas reconstruir la base de datos desde cero:
 
 ```bash
-# Stop containers and wipe the data volume
+# Detener contenedores y eliminar el volumen de datos
 docker compose down -v
 
-# Re-deploy containers with clean initialization
+# Volver a desplegar los contenedores con inicialización limpia
 docker compose up -d
 ```
 
-### Checking Container Logs
-To inspect PostgreSQL startup logs:
+### Inspección de Logs
+Para revisar los logs de inicio del servidor PostgreSQL:
 
 ```bash
 docker logs sst_pesv_pg --tail 50

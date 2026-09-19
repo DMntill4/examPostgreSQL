@@ -44,8 +44,8 @@ Para resolver esta problemática, el presente proyecto diseña e implementa una 
 
 Toda la especificación técnica detallada, el proceso de normalización paso a paso, el diccionario de datos y las instrucciones de instalación se encuentran disponibles en la carpeta `docs/`:
 
-* **[Database Architecture & Implementation Guide (docs/guide.md)](./docs/guide.md)**
-* **[Installation and Quick Start Guide (docs/installation.md)](./docs/installation.md)**
+* **[Guía de Arquitectura e Implementación (docs/guide.md)](./docs/guide.md)**
+* **[Guía de Instalación e Inicio Rápido (docs/installation.md)](./docs/installation.md)**
 
 ---
 
