@@ -42,9 +42,10 @@ Para resolver esta problemática, el presente proyecto diseña e implementa una 
 
 ## 4. Índice de Documentación Técnica
 
-Toda la especificación técnica detallada, el proceso de normalización paso a paso, la dinámica de datos y el diccionario de datos de las 20 tablas se encuentran disponibles en la carpeta `docs/`:
+Toda la especificación técnica detallada, el proceso de normalización paso a paso, el diccionario de datos y las instrucciones de instalación se encuentran disponibles en la carpeta `docs/`:
 
-👉 **[Database Architecture & Implementation Guide (docs/guide.md)](./docs/guide.md)**
+* **[Database Architecture & Implementation Guide (docs/guide.md)](./docs/guide.md)**
+* **[Installation and Quick Start Guide (docs/installation.md)](./docs/installation.md)**
 
 ---
 
