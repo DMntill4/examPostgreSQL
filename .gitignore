@@ -1,0 +1,11 @@
+# Temporary import files
+drawsql_import.sql
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE metadata
+.vscode/
+.idea/
