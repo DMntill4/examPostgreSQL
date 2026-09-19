@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: sst_pesv_pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sst_admin
+      POSTGRES_PASSWORD: sst_admin_pass
+      POSTGRES_DB: sst_pesv_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - sst_pesv_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: sst_pesv_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  sst_pesv_data:
