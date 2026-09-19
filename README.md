@@ -32,11 +32,11 @@ Para resolver esta problemática, el presente proyecto diseña e implementa una 
 
 ### 3.1 Diagrama de Estructura Relacional (DrawSQL)
 
-![Diagrama Entidad-Relación DrawSQL](./diagramE-R.png)
+![Diagrama Entidad-Relación DrawSQL](./img/diagramE-R.png)
 
 ### 3.2 Diagrama Entidad-Relación Completo (20 Tablas - dbdiagram)
 
-![Diagrama Entidad-Relación 20 Tablas](./dbdiagram_er_20_tables.png)
+![Diagrama Entidad-Relación 20 Tablas](./img/dbdiagram_er_20_tables.png)
 
 ---
 
