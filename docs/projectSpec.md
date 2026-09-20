@@ -1,9 +1,4 @@
-# Proyecto Académico: Diseño e Implementación de una Base de Datos para la Gestión de SST y PESV utilizando PostgreSQL
-
-* **Estudiante:** Diego Mantilla
-* **Tecnologías:** PostgreSQL 16, Docker, Docker Compose, PL/pgSQL
-
----
+# Proyecto Académico: Especificación Oficial
 
 ## 1. Introducción
 
@@ -27,20 +22,20 @@ Una organización dedicada a prestar servicios de gestión de **Seguridad y Salu
 
 Cada empresa debe poder configurar su información de manera independiente, incluyendo:
 
-* Datos generales de la organización.
-* Tamaño de la empresa.
-* Personas vinculadas.
-* Cargos y responsabilidades.
-* Sistemas de gestión habilitados.
-* Módulos asociados al SST y PESV.
-* Etapas del ciclo PHVA.
-* Plantillas documentales.
-* Formatos.
-* Evaluaciones.
-* Documentos generados.
-* Seguimiento del avance.
-* Ubicación geográfica.
-* Control de edición de documentos.
+- Datos generales de la organización.
+- Tamaño de la empresa.
+- Personas vinculadas.
+- Cargos y responsabilidades.
+- Sistemas de gestión habilitados.
+- Módulos asociados al SST y PESV.
+- Etapas del ciclo PHVA.
+- Plantillas documentales.
+- Formatos.
+- Evaluaciones.
+- Documentos generados.
+- Seguimiento del avance.
+- Ubicación geográfica.
+- Control de edición de documentos.
 
 Debido a que varias organizaciones utilizarán simultáneamente la plataforma, es necesario garantizar el aislamiento lógico de la información mediante una arquitectura de datos **multiempresa o multi-tenant**.
 
@@ -82,68 +77,22 @@ El principal problema consiste entonces en:
 
 ## 5. Alcance del Proyecto
 
-El proyecto comprende el diseño y construcción de una base de datos PostgreSQL orientada a la administración de información de una plataforma SST/PESV.
+El proyecto comprenderá el diseño y construcción de una base de datos PostgreSQL orientada a la administración de información de una plataforma SST/PESV.
 
 El sistema maneja los siguientes componentes principales:
 
 | Componente | Función |
 | :--- | :--- |
-| **Empresas** | Administrar las organizaciones registradas (`tenants`) |
-| **Personas** | Gestionar usuarios o trabajadores asociados a cada empresa (`persons`) |
-| **Cargos** | Definir cargos dentro de las organizaciones (`positions`) |
-| **Sistemas SST** | Configurar sistemas habilitados para cada organización (`tenantsystems`) |
-| **Módulos** | Organizar los componentes funcionales del sistema (`modules`, `tenant_modules`) |
-| **Etapas PHVA** | Clasificar procesos según Planear, Hacer, Verificar y Actuar (`phva_stages`) |
-| **Plantillas** | Gestionar documentos base (`templates`, `tenanttemplates`) |
-| **Formatos** | Definir formatos asociados a módulos (`formats_sst`) |
-| **Evaluaciones** | Registrar instrumentos o plantillas de evaluación (`evaluations`) |
-| **Ubicación Geográfica** | Administrar países, departamentos y municipios (`countries`, `regions`, `cities`) |
-| **Bloqueos** | Controlar la edición simultánea de recursos (`editing_locks`) |
-| **Indicadores y Auditoría** | Determinar nivel de avance y traza de auditoría (`audit_log`) |
+| **Empresas** | Administrar las organizaciones registradas |
+| **Personas** | Gestionar usuarios o trabajadores asociados a cada empresa |
+| **Cargos** | Definir cargos dentro de las organizaciones |
+| **Sistemas SST** | Configurar sistemas habilitados para cada organización |
+| **Módulos** | Organizar los componentes funcionales del sistema |
+| **Etapas PHVA** | Clasificar procesos según Planear, Hacer, Verificar y Actuar |
+| **Plantillas** | Gestionar documentos base |
+| **Formatos** | Definir formatos asociados a módulos |
+| **Evaluaciones** | Registrar instrumentos o plantillas de evaluación |
+| **Ubicación Geográfica** | Administrar países, departamentos y municipios |
+| **Bloqueos** | Controlar la edición simultánea de recursos |
+| **Indicadores** | Determinar nivel de avance y cumplimiento |
 | **Vistas Materializadas** | Facilitar consultas consolidadas |
-
----
-
-## 6. Diagramas Entidad-Relación
-
-### 6.1 Diagrama Entidad-Relación Completo (20 Tablas - dbdiagram)
-
-![Diagrama Entidad-Relación 20 Tablas](./img/dbdiagram_er_20_tables.png)
-
-### 6.2 Diagrama de Estructura Relacional (DrawSQL)
-
-![Diagrama Entidad-Relación DrawSQL](./img/diagramE-R.png)
-
----
-
-## 7. Estructura del Repositorio y Carpetas de Consultas
-
-* `sql/01_schema.sql`: Script DDL de creación de las 20 tablas normalizadas (3FN) con llaves primarias, foráneas y restricciones `CHECK`.
-* `sql/02_seed_data.sql`: Script DML de carga de datos iniciales y datos de prueba por tenant.
-* `queries/`: Archivos `.sql` preparados en inglés para la resolución progresiva de las consultas:
-  * `basicQueries.sql`
-  * `intermediateQueries.sql`
-  * `advancedQueries.sql`
-  * `viewsAndMviews.sql`
-  * `storedProcedures.sql`
-  * `functions.sql`
-  * `triggers.sql`
-* `docs/`: Documentación técnica detallada del proyecto:
-  * `systemOverview.md`: Visión general formal de la arquitectura y diccionario de datos.
-  * `guide.md`: Manual didáctico de normalización y comportamiento del sistema.
-  * `installation.md`: Guía de despliegue con Docker y pgAdmin 4.
-
----
-
-## 8. Instrucciones de Despliegue y Ejecución
-
-```bash
-# Levantar el entorno PostgreSQL 16 + pgAdmin 4 en Docker
-docker compose up -d
-
-# Conectarse a la consola psql dentro del contenedor
-docker exec -it sst_pesv_pg psql -U sst_admin -d sst_pesv_db
-
-# Interfaz Web de pgAdmin 4
-# URL: http://localhost:8080 (Credenciales: admin@admin.com / admin)
-```
