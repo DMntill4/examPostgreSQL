@@ -18,7 +18,6 @@ Base de datos relacional orientada a soportar una plataforma multi-tenant para l
 * **[Guía de Instalación y Despliegue](./docs/installation.md)**: Instrucciones paso a paso para levantar el entorno en Docker Compose (PostgreSQL 16 + pgAdmin 4).
 * **[Visión General del Sistema](./docs/systemOverview.md)**: Arquitectura del sistema multi-tenant, entidades clave y requerimientos de información.
 * **[Especificación Académica del Proyecto](./docs/projectSpec.md)**: Planteamiento del problema, objetivos generales y objetivos específicos.
-* **[Manual Didáctico del Dominio SST/PESV](./docs/guide.md)**: Documento explicativo sobre el ciclo PHVA y la gestión documental por organización.
 
 ---
 
