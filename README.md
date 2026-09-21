@@ -6,6 +6,8 @@
 [![PL/pgSQL](https://img.shields.io/badge/PL/pgSQL-Procedural-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/docs/current/plpgsql.html)
 [![pgAdmin 4](https://img.shields.io/badge/pgAdmin-4-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.pgadmin.org/)
 
+* **Autor:** [Diego Mantilla](https://github.com/DMntill4)
+
 Base de datos relacional orientada a soportar una plataforma multi-tenant para la administración de la Seguridad y Salud en el Trabajo (SST) y el Plan Estratégico de Seguridad Vial (PESV).
 
 ---
