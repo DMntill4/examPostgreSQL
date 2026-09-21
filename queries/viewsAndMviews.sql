@@ -48,7 +48,7 @@ SELECT t.id AS tenant_id, t.name AS empresa,
        COUNT(tt.id) AS total_documentos,
        COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) AS documentos_finalizados,
        COUNT(CASE WHEN ds.code = 'PENDIENTE' THEN 1 END) AS documentos_pendientes,
-       COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS pct_cumplimiento
+       ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct_cumplimiento
 FROM tenants t
 LEFT JOIN tenanttemplates tt ON tt.tenant_id = t.id
 LEFT JOIN document_statuses ds ON ds.id = tt.document_status_id

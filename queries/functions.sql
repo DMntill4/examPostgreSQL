@@ -21,7 +21,10 @@ BEGIN
     JOIN document_statuses ds ON ds.id = tt.document_status_id
     WHERE tt.tenant_id = p_tenant_id;
     
-    RETURN COALESCE(ROUND((v_fin::NUMERIC / NULLIF(v_total, 0)) * 100, 2), 0.00);
+    IF v_total = 0 THEN
+        RETURN 0.00;
+    END IF;
+    RETURN ROUND((v_fin * 100.0 / v_total), 2);
 END;
 $$;
 

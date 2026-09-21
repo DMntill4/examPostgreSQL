@@ -119,7 +119,11 @@ BEGIN
     JOIN document_statuses ds ON ds.id = tt.document_status_id
     WHERE tt.tenant_id = p_tenant_id;
     
-    p_pct := COALESCE(ROUND((v_fin::NUMERIC / NULLIF(v_total, 0)) * 100, 2), 0);
+    IF v_total = 0 THEN
+        p_pct := 0;
+    ELSE
+        p_pct := ROUND((v_fin * 100.0 / v_total), 2);
+    END IF;
 END;
 $$;
 

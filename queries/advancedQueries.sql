@@ -68,7 +68,7 @@ SELECT
     t.name AS empresa,
     ps.name AS etapa_phva,
     COUNT(tt.id) AS plantillas_etapa,
-    ROUND((COUNT(tt.id)::NUMERIC / NULLIF(SUM(COUNT(tt.id)) OVER (PARTITION BY t.id), 0)) * 100, 2) AS porcentaje
+    ROUND((COUNT(tt.id) * 100.0 / SUM(COUNT(tt.id)) OVER (PARTITION BY t.id)), 2) AS porcentaje
 FROM tenanttemplates tt
 JOIN tenants t ON t.id = tt.tenant_id
 JOIN phva_stages ps ON ps.id = tt.phva_stage_id
@@ -89,7 +89,7 @@ WHERE c.posicion = 1;
 -- 10. Porcentaje de documentos finalizados frente al total por empresa
 SELECT t.name AS empresa, COUNT(tt.id) AS total_documentos,
     COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) AS finalizados,
-    ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2) AS pct_cumplimiento
+    ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct_cumplimiento
 FROM tenants t
 LEFT JOIN tenanttemplates tt ON tt.tenant_id = t.id
 LEFT JOIN document_statuses ds ON ds.id = tt.document_status_id
@@ -98,7 +98,7 @@ GROUP BY t.id, t.name;
 -- 11. Organizaciones con porcentaje de cumplimiento por debajo del promedio general
 WITH cumplimiento_empresa AS (
     SELECT t.id AS tenant_id, t.name AS empresa,
-        COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS pct
+        ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct
     FROM tenants t
     LEFT JOIN tenanttemplates tt ON tt.tenant_id = t.id
     LEFT JOIN document_statuses ds ON ds.id = tt.document_status_id
@@ -109,10 +109,10 @@ WHERE pct < (SELECT AVG(pct) FROM cumplimiento_empresa);
 
 -- 12. Clasificación de cumplimiento en Bajo, Medio y Alto
 SELECT t.name AS empresa,
-    COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS porcentaje,
+    ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS porcentaje,
     CASE 
-        WHEN COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) < 50 THEN 'Bajo'
-        WHEN COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) BETWEEN 50 AND 80 THEN 'Medio'
+        WHEN (COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)) < 50 THEN 'Bajo'
+        WHEN (COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)) BETWEEN 50 AND 80 THEN 'Medio'
         ELSE 'Alto' 
     END AS categoria_cumplimiento
 FROM tenants t
@@ -123,7 +123,7 @@ GROUP BY t.id, t.name;
 -- 13. Ranking de organizaciones por porcentaje de cumplimiento
 WITH cumplimiento AS (
     SELECT t.name AS empresa,
-        COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS pct
+        ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct
     FROM tenants t
     LEFT JOIN tenanttemplates tt ON tt.tenant_id = t.id
     LEFT JOIN document_statuses ds ON ds.id = tt.document_status_id
@@ -135,7 +135,7 @@ FROM cumplimiento;
 -- 14. Porcentaje de cumplimiento y diferencia respecto al promedio general
 WITH cumplimiento AS (
     SELECT t.name AS empresa,
-        COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS pct
+        ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct
     FROM tenants t
     LEFT JOIN tenanttemplates tt ON tt.tenant_id = t.id
     LEFT JOIN document_statuses ds ON ds.id = tt.document_status_id
@@ -214,7 +214,7 @@ SELECT t.name AS empresa, COUNT(tt.id) AS total_documentos,
     COUNT(CASE WHEN ds.code = 'BORRADOR' THEN 1 END) AS borrador,
     COUNT(CASE WHEN ds.code = 'NO_INICIADO' THEN 1 END) AS no_iniciados,
     COUNT(CASE WHEN ds.code = 'PENDIENTE' THEN 1 END) AS pendientes,
-    COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS pct_cumplimiento
+    ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct_cumplimiento
 FROM tenants t
 LEFT JOIN tenanttemplates tt ON tt.tenant_id = t.id
 LEFT JOIN document_statuses ds ON ds.id = tt.document_status_id
@@ -223,7 +223,7 @@ GROUP BY t.id, t.name;
 -- 24. Comparativa de porcentaje de cumplimiento SST vs PESV por organización
 WITH cumplimiento_sistema AS (
     SELECT tt.tenant_id, sys.name AS sistema,
-        COALESCE(ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END)::NUMERIC / NULLIF(COUNT(tt.id), 0)) * 100, 2), 0) AS pct
+        ROUND((COUNT(CASE WHEN ds.code = 'FINALIZADO' THEN 1 END) * 100.0 / COUNT(tt.id)), 2) AS pct
     FROM tenanttemplates tt
     JOIN type_system_sst sys ON sys.id = tt.type_system_sst_id
     JOIN document_statuses ds ON ds.id = tt.document_status_id
