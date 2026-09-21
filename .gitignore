@@ -1,12 +1,6 @@
 # Temporary import files
 drawsql_import.sql
 
-# Personal Study Guide (Ignored from remote git repository)
-docs/examStudyGuide.md
-docs/examStudy.md
-docs/advancedQueriesSolution.md
-docs/viewsAndMviewsSolution.md
-
 # OS metadata
 .DS_Store
 Thumbs.db

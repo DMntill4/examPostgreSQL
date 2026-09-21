@@ -116,22 +116,27 @@ El sistema maneja los siguientes componentes principales:
 
 ---
 
-## 7. Estructura del Repositorio y Carpetas de Consultas
+## 7. Estructura del Repositorio, Documentación y Consultas
 
-* `sql/01_schema.sql`: Script DDL de creación de las 20 tablas normalizadas (3FN) con llaves primarias, foráneas y restricciones `CHECK`.
-* `sql/02_seed_data.sql`: Script DML de carga de datos iniciales y datos de prueba por tenant.
-* `queries/`: Archivos `.sql` preparados en inglés para la resolución progresiva de las consultas:
-  * `basicQueries.sql`
-  * `intermediateQueries.sql`
-  * `advancedQueries.sql`
-  * `viewsAndMviews.sql`
-  * `storedProcedures.sql`
-  * `functions.sql`
-  * `triggers.sql`
-* `docs/`: Documentación técnica detallada del proyecto:
-  * `systemOverview.md`: Visión general formal de la arquitectura y diccionario de datos.
-  * `guide.md`: Manual didáctico de normalización y comportamiento del sistema.
-  * `installation.md`: Guía de despliegue con Docker y pgAdmin 4.
+### 📜 Scripts de Base de Datos (`sql/`)
+* [`sql/01_schema.sql`](./sql/01_schema.sql): Script DDL de creación del esquema `sst` con las 20 tablas normalizadas (3FN), llaves primarias, foráneas y restricciones `CHECK`.
+* [`sql/02_seed_data.sql`](./sql/02_seed_data.sql): Script DML de carga de datos iniciales de catálogo y semillas de prueba por empresa.
+
+### 🔍 Scripts de Consultas y Lógica Programable (`queries/`)
+* [`queries/basicQueries.sql`](./queries/basicQueries.sql): **15 Consultas Básicas** (`SELECT`, `WHERE`, `ORDER BY`, `LIKE`, `IN`, `BETWEEN`).
+* [`queries/intermediateQueries.sql`](./queries/intermediateQueries.sql): **20 Consultas Intermedias** (`JOIN`, `GROUP BY`, `HAVING`, `COUNT`, `SUM`, `AVG`, `CASE WHEN`).
+* [`queries/advancedQueries.sql`](./queries/advancedQueries.sql): **25 Consultas Avanzadas** (Window Functions, CTEs, Subconsultas correlacionadas, Ranks, Pivots).
+* [`queries/viewsAndMviews.sql`](./queries/viewsAndMviews.sql): **8 Vistas y Vistas Materializadas** (`CREATE VIEW`, `CREATE MATERIALIZED VIEW`, `REFRESH`, `UNIQUE INDEX`).
+* [`queries/storedProcedures.sql`](./queries/storedProcedures.sql): **15 Procedimientos Almacenados** (`CREATE PROCEDURE`, `CALL`, `RAISE EXCEPTION`, `OUT`, `ON CONFLICT`).
+* [`queries/functions.sql`](./queries/functions.sql): **8 Funciones PL/pgSQL** (`CREATE FUNCTION`, `RETURNS`, `DECLARE`, `STRICT`).
+* [`queries/triggers.sql`](./queries/triggers.sql): **15 Triggers Automatizados** (`BEFORE`/`AFTER INSERT/UPDATE/DELETE`, Auditoría en `audit_log`, Control de Concurrencia en `editing_locks`).
+
+### 📚 Documentación Técnica y Teórica (`docs/`)
+* [`docs/systemOverview.md`](./docs/systemOverview.md): Visión general formal del sistema multi-tenant, objetivos y diccionario de entidades.
+* [`docs/normalizationAndERD.md`](./docs/normalizationAndERD.md): Guía paso a paso de **Normalización (1FN, 2FN, 3FN)**, claves candidatas, dependencias funcionales y análisis del ERD de 20 tablas.
+* [`docs/projectSpec.md`](./docs/projectSpec.md): Especificación académica completa del proyecto, alcance y preguntas problémicas.
+* [`docs/guide.md`](./docs/guide.md): Manual didáctico sobre la gestión documental PHVA y modelos multi-tenant en PostgreSQL.
+* [`docs/installation.md`](./docs/installation.md): Guía detallada de instalación y despliegue del entorno en Docker Compose.
 
 ---
 
