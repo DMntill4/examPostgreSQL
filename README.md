@@ -1,154 +1,87 @@
-# Proyecto Académico: Diseño e Implementación de una Base de Datos para la Gestión de SST y PESV utilizando PostgreSQL
+# Gestión Multi-Tenant de SST y PESV en PostgreSQL
 
-* **Estudiante:** Diego Mantilla
-* **Tecnologías:** PostgreSQL 16, Docker, Docker Compose, PL/pgSQL
+[![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16.0-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-24.0+-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker Compose](https://img.shields.io/badge/Docker--Compose-v2+-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![PL/pgSQL](https://img.shields.io/badge/PL/pgSQL-Procedural-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/docs/current/plpgsql.html)
+[![pgAdmin 4](https://img.shields.io/badge/pgAdmin-4-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.pgadmin.org/)
 
----
-
-## 1. Introducción
-
-Las organizaciones actuales requieren sistemas de información que les permitan administrar de manera estructurada, segura y trazable los procesos asociados a la **Seguridad y Salud en el Trabajo (SST)** y al **Plan Estratégico de Seguridad Vial (PESV)**. Estos procesos involucran múltiples tipos de información, entre ellos organizaciones, trabajadores, cargos, documentos, módulos, formatos, evaluaciones, etapas de gestión y configuraciones específicas para cada empresa.
-
-Cuando esta información se administra mediante archivos independientes, hojas de cálculo o documentos dispersos, pueden presentarse dificultades relacionadas con la duplicidad de datos, inconsistencias, falta de trazabilidad, pérdida de información y poca capacidad para generar indicadores de seguimiento.
-
-Para resolver esta problemática se propone desarrollar una base de datos relacional utilizando **PostgreSQL**, orientada a soportar una plataforma de gestión de SST y PESV bajo un modelo **multi-tenant**, permitiendo que múltiples organizaciones utilicen el mismo sistema manteniendo sus datos separados lógicamente.
-
-El modelo de datos contempla entidades relacionadas con empresas o `tenants`, personas, cargos, módulos, sistemas SST, plantillas, formatos, etapas del ciclo PHVA, evaluaciones, localización geográfica y mecanismos de control de edición. Asimismo, incorpora estructuras para la generación de información consolidada y seguimiento mediante vistas especializadas.
-
-A través del desarrollo de este proyecto, los estudiantes aplicarán los conocimientos adquiridos sobre **modelado de bases de datos, normalización, lenguaje SQL, restricciones de integridad, relaciones entre tablas, consultas, vistas, procedimientos, funciones, triggers, índices y administración básica de PostgreSQL**.
-
-El proyecto permitirá abordar un escenario similar a los utilizados en aplicaciones empresariales reales, fortaleciendo las competencias necesarias para diseñar soluciones de almacenamiento de datos robustas, escalables y mantenibles.
+Base de datos relacional para la administración estructurada, trazable e independiente (**multi-tenant**) de la **Seguridad y Salud en el Trabajo (SST)** y el **Plan Estratégico de Seguridad Vial (PESV)** de múltiples organizaciones.
 
 ---
 
-## 2. Planteamiento del Problema
+## 🛠️ Stack Tecnológico
 
-Una organización dedicada a prestar servicios de gestión de **Seguridad y Salud en el Trabajo y Plan Estratégico de Seguridad Vial** necesita desarrollar una plataforma tecnológica que pueda ser utilizada por diferentes empresas.
-
-Cada empresa debe poder configurar su información de manera independiente, incluyendo:
-
-* Datos generales de la organización.
-* Tamaño de la empresa.
-* Personas vinculadas.
-* Cargos y responsabilidades.
-* Sistemas de gestión habilitados.
-* Módulos asociados al SST y PESV.
-* Etapas del ciclo PHVA.
-* Plantillas documentales.
-* Formatos.
-* Evaluaciones.
-* Documentos generados.
-* Seguimiento del avance.
-* Ubicación geográfica.
-* Control de edición de documentos.
-
-Debido a que varias organizaciones utilizarán simultáneamente la plataforma, es necesario garantizar el aislamiento lógico de la información mediante una arquitectura de datos **multiempresa o multi-tenant**.
-
-Además, la plataforma deberá permitir consultar el grado de avance de las empresas respecto a los documentos exigidos para cada etapa del proceso y facilitar la generación de indicadores de cumplimiento.
-
-El principal problema consiste entonces en:
-
-> **¿Cómo diseñar e implementar una base de datos relacional en PostgreSQL que permita gestionar de forma centralizada, segura, normalizada y escalable la información asociada a los procesos SST y PESV de múltiples organizaciones?**
+* **Motor de Base de Datos:** PostgreSQL 16
+* **Programación en BD:** PL/pgSQL (Procedimientos, Funciones, Triggers)
+* **Contenerización:** Docker & Docker Compose
+* **Administración Visual:** pgAdmin 4
+* **Diseño y Diagramación:** DrawSQL & dbdiagram.io
 
 ---
 
-## 3. Objetivo General
+## 🚀 Guía Rápida de Despliegue y Ejecución
 
-**Diseñar e implementar una base de datos relacional en PostgreSQL para soportar una plataforma multi-tenant de gestión de Seguridad y Salud en el Trabajo (SST) y Plan Estratégico de Seguridad Vial (PESV), aplicando técnicas de modelado, normalización, integridad referencial, programación SQL y optimización de consultas.**
-
----
-
-## 4. Objetivos Específicos
-
-1. **Analizar los requerimientos de información** asociados a la gestión de SST y PESV, identificando las principales entidades, atributos, reglas de negocio y relaciones necesarias para el sistema.
-2. **Interpretar y documentar el modelo entidad-relación** propuesto para la plataforma, identificando entidades principales, entidades de parametrización y relaciones entre los diferentes componentes.
-3. **Diseñar un modelo de datos multi-tenant** que permita almacenar información correspondiente a múltiples organizaciones manteniendo la independencia lógica de los datos.
-4. **Aplicar técnicas de normalización** para disminuir la redundancia y garantizar consistencia e integridad en la información almacenada.
-5. **Implementar el modelo físico en PostgreSQL**, utilizando tablas, claves primarias, claves foráneas, restricciones y tipos de datos adecuados.
-6. **Implementar operaciones CRUD** mediante instrucciones SQL para la gestión de organizaciones, personas, cargos, módulos, plantillas, formatos y evaluaciones.
-7. **Construir consultas SQL** que permitan recuperar y analizar información relacionada con los sistemas SST y PESV.
-8. **Implementar consultas utilizando JOIN**, subconsultas, funciones de agregación, agrupamiento y expresiones condicionales.
-9. **Diseñar vistas y vistas materializadas** orientadas a la generación de indicadores y reportes de seguimiento.
-10. **Implementar funciones y procedimientos almacenados en PL/pgSQL** que automaticen operaciones relacionadas con la administración de la información.
-11. **Implementar triggers** que permitan controlar procesos automáticos de auditoría, actualización o validación de datos.
-12. **Diseñar índices** que permitan mejorar el rendimiento de las consultas utilizadas con mayor frecuencia.
-13. **Implementar mecanismos de integridad y validación** mediante restricciones como `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CHECK` y `NOT NULL`.
-14. **Analizar el funcionamiento del modelo PHVA** dentro de la estructura de datos para identificar el avance de cada organización.
-15. **Construir consultas de indicadores** que permitan determinar el porcentaje de cumplimiento documental de una empresa.
-16. **Aplicar mecanismos básicos de concurrencia**, analizando el uso de estructuras de bloqueo para evitar la edición simultánea de determinados recursos.
-17. **Documentar técnicamente la base de datos**, incluyendo diccionario de datos, relaciones, restricciones y principales consultas.
-
----
-
-## 5. Alcance del Proyecto
-
-El proyecto comprende el diseño y construcción de una base de datos PostgreSQL orientada a la administración de información de una plataforma SST/PESV.
-
-El sistema maneja los siguientes componentes principales:
-
-| Componente | Función |
-| :--- | :--- |
-| **Empresas** | Administrar las organizaciones registradas (`tenants`) |
-| **Personas** | Gestionar usuarios o trabajadores asociados a cada empresa (`persons`) |
-| **Cargos** | Definir cargos dentro de las organizaciones (`positions`) |
-| **Sistemas SST** | Configurar sistemas habilitados para cada organización (`tenantsystems`) |
-| **Módulos** | Organizar los componentes funcionales del sistema (`modules`, `tenant_modules`) |
-| **Etapas PHVA** | Clasificar procesos según Planear, Hacer, Verificar y Actuar (`phva_stages`) |
-| **Plantillas** | Gestionar documentos base (`templates`, `tenanttemplates`) |
-| **Formatos** | Definir formatos asociados a módulos (`formats_sst`) |
-| **Evaluaciones** | Registrar instrumentos o plantillas de evaluación (`evaluations`) |
-| **Ubicación Geográfica** | Administrar países, departamentos y municipios (`countries`, `regions`, `cities`) |
-| **Bloqueos** | Controlar la edición simultánea de recursos (`editing_locks`) |
-| **Indicadores y Auditoría** | Determinar nivel de avance y traza de auditoría (`audit_log`) |
-| **Vistas Materializadas** | Facilitar consultas consolidadas |
-
----
-
-## 6. Diagramas Entidad-Relación
-
-### 6.1 Diagrama Entidad-Relación Completo (20 Tablas - dbdiagram)
-
-![Diagrama Entidad-Relación 20 Tablas](./img/dbdiagram_er_20_tables.png)
-
-### 6.2 Diagrama de Estructura Relacional (DrawSQL)
-
-![Diagrama Entidad-Relación DrawSQL](./img/diagramE-R.png)
-
----
-
-## 7. Estructura del Repositorio, Documentación y Consultas
-
-### 📜 Scripts de Base de Datos (`sql/`)
-* [`sql/01_schema.sql`](./sql/01_schema.sql): Script DDL de creación del esquema `sst` con las 20 tablas normalizadas (3FN), llaves primarias, foráneas y restricciones `CHECK`.
-* [`sql/02_seed_data.sql`](./sql/02_seed_data.sql): Script DML de carga de datos iniciales de catálogo y semillas de prueba por empresa.
-
-### 🔍 Scripts de Consultas y Lógica Programable (`queries/`)
-* [`queries/basicQueries.sql`](./queries/basicQueries.sql): **15 Consultas Básicas** (`SELECT`, `WHERE`, `ORDER BY`, `LIKE`, `IN`, `BETWEEN`).
-* [`queries/intermediateQueries.sql`](./queries/intermediateQueries.sql): **20 Consultas Intermedias** (`JOIN`, `GROUP BY`, `HAVING`, `COUNT`, `SUM`, `AVG`, `CASE WHEN`).
-* [`queries/advancedQueries.sql`](./queries/advancedQueries.sql): **25 Consultas Avanzadas** (Window Functions, CTEs, Subconsultas correlacionadas, Ranks, Pivots).
-* [`queries/viewsAndMviews.sql`](./queries/viewsAndMviews.sql): **8 Vistas y Vistas Materializadas** (`CREATE VIEW`, `CREATE MATERIALIZED VIEW`, `REFRESH`, `UNIQUE INDEX`).
-* [`queries/storedProcedures.sql`](./queries/storedProcedures.sql): **15 Procedimientos Almacenados** (`CREATE PROCEDURE`, `CALL`, `RAISE EXCEPTION`, `OUT`, `ON CONFLICT`).
-* [`queries/functions.sql`](./queries/functions.sql): **8 Funciones PL/pgSQL** (`CREATE FUNCTION`, `RETURNS`, `DECLARE`, `STRICT`).
-* [`queries/triggers.sql`](./queries/triggers.sql): **15 Triggers Automatizados** (`BEFORE`/`AFTER INSERT/UPDATE/DELETE`, Auditoría en `audit_log`, Control de Concurrencia en `editing_locks`).
-
-### 📚 Documentación Técnica y Teórica (`docs/`)
-* [`docs/systemOverview.md`](./docs/systemOverview.md): Visión general formal del sistema multi-tenant, objetivos y diccionario de entidades.
-* [`docs/normalizationAndERD.md`](./docs/normalizationAndERD.md): Guía paso a paso de **Normalización (1FN, 2FN, 3FN)**, claves candidatas, dependencias funcionales y análisis del ERD de 20 tablas.
-* [`docs/projectSpec.md`](./docs/projectSpec.md): Especificación académica completa del proyecto, alcance y preguntas problémicas.
-* [`docs/guide.md`](./docs/guide.md): Manual didáctico sobre la gestión documental PHVA y modelos multi-tenant en PostgreSQL.
-* [`docs/installation.md`](./docs/installation.md): Guía detallada de instalación y despliegue del entorno en Docker Compose.
-
----
-
-## 8. Instrucciones de Despliegue y Ejecución
+### 1. Iniciar los Contenedores
+Ejecuta el siguiente comando en la raíz del proyecto para levantar PostgreSQL 16 y pgAdmin 4:
 
 ```bash
-# Levantar el entorno PostgreSQL 16 + pgAdmin 4 en Docker
 docker compose up -d
-
-# Conectarse a la consola psql dentro del contenedor
-docker exec -it sst_pesv_pg psql -U sst_admin -d sst_pesv_db
-
-# Interfaz Web de pgAdmin 4
-# URL: http://localhost:8080 (Credenciales: admin@admin.com / admin)
 ```
+
+### 2. Conectarse vía CLI (`psql`)
+Accede directamente al contenedor de PostgreSQL:
+
+```bash
+docker exec -it sst_pesv_pg psql -U sst_admin -d sst_pesv_db
+```
+
+### 3. Cargar Esquema y Semilla (si es necesario)
+Los scripts iniciales se ejecutan automáticamente al levantar el contenedor, pero se pueden ejecutar manualmente con:
+
+```bash
+# Cargar DDL de Tablas y Restricciones
+docker exec -i sst_pesv_pg psql -U sst_admin -d sst_pesv_db -f /docker-entrypoint-initdb.d/01_schema.sql
+
+# Cargar Datos de Prueba
+docker exec -i sst_pesv_pg psql -U sst_admin -d sst_pesv_db -f /docker-entrypoint-initdb.d/02_seed_data.sql
+```
+
+### 4. Acceso Web a pgAdmin 4
+* **URL:** `http://localhost:8080`
+* **Usuario:** `admin@admin.com`
+* **Contraseña:** `admin`
+
+---
+
+## 📌 Índice General del Repositorio
+
+### 🗄️ 1. Esquema Físico y Datos (`sql/`)
+* [`sql/01_schema.sql`](./sql/01_schema.sql): Script DDL completo de creación del esquema `sst` con 20 tablas normalizadas en 3FN, claves primarias, foráneas e integridad referencial.
+* [`sql/02_seed_data.sql`](./sql/02_seed_data.sql): Carga de catálogos base y semillas de prueba para entornos multi-empresa.
+
+### 🔍 2. Consultas y Lógica Programable (`queries/`)
+* [`queries/basicQueries.sql`](./queries/basicQueries.sql): **15 Consultas Básicas** — Filtrado, ordenamiento, comparaciones e `IN`/`BETWEEN`.
+* [`queries/intermediateQueries.sql`](./queries/intermediateQueries.sql): **20 Consultas Intermedias** — Agregaciones, `JOIN`s múltiples, agrupamientos `GROUP BY` y filtros `HAVING`.
+* [`queries/advancedQueries.sql`](./queries/advancedQueries.sql): **25 Consultas Avanzadas** — Window Functions (`DENSE_RANK`, `PARTITION BY`), CTEs, Subconsultas correlacionadas y Pivots.
+* [`queries/viewsAndMviews.sql`](./queries/viewsAndMviews.sql): **8 Vistas y Vistas Materializadas** — Tableros consolidados, refresco `CONCURRENTLY` e Índices Únicos.
+* [`queries/storedProcedures.sql`](./queries/storedProcedures.sql): **15 Procedimientos Almacenados** — Transacciones, parámetros `OUT`, validaciones lógicas e inserciones seguras.
+* [`queries/functions.sql`](./queries/functions.sql): **8 Funciones PL/pgSQL** — Funciones escalares y tabulares de cálculo de cumplimiento.
+* [`queries/triggers.sql`](./queries/triggers.sql): **15 Triggers Automatizados** — Auditoría paso a paso (`audit_log`) y control de bloqueos de edición (`editing_locks`).
+
+### 📚 3. Centro de Documentación Técnica (`docs/`)
+* [`docs/systemOverview.md`](./docs/systemOverview.md): Visión general de la arquitectura del sistema y diccionario de entidades.
+* [`docs/normalizationAndERD.md`](./docs/normalizationAndERD.md): Proceso de normalización a **3FN**, análisis de dependencias funcionales y diseño relacional.
+* [`docs/projectSpec.md`](./docs/projectSpec.md): Especificación académica, problemática planteada y objetivos del proyecto.
+* [`docs/guide.md`](./docs/guide.md): Manual didáctico sobre el ciclo PHVA y la arquitectura multi-tenant.
+* [`docs/installation.md`](./docs/installation.md): Guía paso a paso de instalación y solución de problemas con Docker.
+
+---
+
+## 🗺️ Diagramas de Entidad-Relación
+
+### Diagrama Entidad-Relación (20 Tablas)
+![Diagrama Entidad-Relación 20 Tablas](./img/dbdiagram_er_20_tables.png)
+
+### Diagrama Relacional en DrawSQL
+![Diagrama Entidad-Relación DrawSQL](./img/diagramE-R.png)
